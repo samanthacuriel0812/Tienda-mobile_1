@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ProductCard from "./components/ProductCard";
 import Checkout from "./components/Checkout";
+import Historial from "./components/Historial";
 import "./App.css";
 
 const productos = [
@@ -18,12 +19,22 @@ export default function App() {
   const [categoria, setCategoria] = useState("Todas");
   const [busqueda, setBusqueda] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [pedidos, setPedidos] = useState([]);
 
   const agregar = (p) => setCarrito([...carrito, p]);
   const quitar = (indice) => setCarrito(carrito.filter((_, i) => i !== indice));
   const total = carrito.reduce((suma, p) => suma + p.precio, 0);
 
   const confirmarPedido = (datos) => {
+    const nuevoPedido = {
+      id: pedidos.length + 1,
+      fecha: new Date().toLocaleString(),
+      productos: carrito,
+      total,
+      direccion: datos.direccion,
+      pago: datos.pago,
+    };
+    setPedidos([nuevoPedido, ...pedidos]);
     setMensaje(
       `¡Gracias, ${datos.nombre}! Tu pedido de $${total} se enviará a ${datos.direccion} (pago: ${datos.pago}).`
     );
@@ -76,6 +87,8 @@ export default function App() {
         <Checkout total={total} onConfirmar={confirmarPedido} />
       )}
       {mensaje && <p>{mensaje}</p>}
+
+      <Historial pedidos={pedidos} />
     </div>
   );
 }
