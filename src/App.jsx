@@ -1,7 +1,9 @@
+
 import { useState } from "react";
 import ProductCard from "./components/ProductCard";
 import Checkout from "./components/Checkout";
 import Historial from "./components/Historial";
+import Recomendaciones from "./components/Recomendaciones";
 import "./App.css";
 
 const productos = [
@@ -73,6 +75,13 @@ export default function App() {
         <ProductCard key={p.id} producto={p} onAgregar={agregar} />
       ))}
       {visibles.length === 0 && <p>No hay productos con ese filtro.</p>}
+
+      <Recomendaciones
+        productos={productos}
+        carrito={carrito}
+        pedidos={pedidos}
+        onAgregar={agregar}
+      />
 
       <h2>Carrito ({carrito.length})</h2>
       {carrito.map((p, i) => (
