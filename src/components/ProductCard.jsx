@@ -7,12 +7,3 @@ export default function ProductCard({ producto, onAgregar }) {
     </div>
   );
   
-}
-import Recomendaciones from "./components/Recomendaciones";
-
-<Recomendaciones
-  products={products}
-  cart={cart}
-  orders={orders}
-  onAdd={agregarAlCarrito}
-/>
