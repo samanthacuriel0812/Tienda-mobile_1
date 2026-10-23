@@ -1,29 +1,26 @@
 import "./Recomendaciones.css";
 
 // Props:
-//   products -> catálogo completo: [{ id, name, price, category }]
-//   cart     -> productos en el carrito: [{ id, quantity, ... }]
-//   orders   -> pedidos confirmados (historial): [{ items: [{ id, ... }] }]
-//   onAdd    -> función que agrega un producto al carrito (la misma de ProductCard)
-export default function Recomendaciones({ products = [], cart = [], orders = [], onAdd }) {
-  const categoriaDe = (id) => products.find((p) => p.id === id)?.category;
-
-  // Puntos por categoría: lo que está en el carrito pesa más que lo ya comprado.
+//   productos -> catálogo completo: [{ id, nombre, precio, categoria }]
+//   carrito   -> productos en el carrito (arreglo de productos)
+//   pedidos   -> historial: [{ productos: [...] }]
+//   onAgregar -> función que agrega un producto al carrito
+export default function Recomendaciones({ productos = [], carrito = [], pedidos = [], onAgregar }) {
+  // Puntos por categoría: lo del carrito pesa más que lo ya comprado.
   const puntos = {};
-  const sumar = (id, peso) => {
-    const cat = categoriaDe(id);
-    if (cat) puntos[cat] = (puntos[cat] || 0) + peso;
+  const sumar = (p, peso) => {
+    puntos[p.categoria] = (puntos[p.categoria] || 0) + peso;
   };
-  cart.forEach((item) => sumar(item.id, 2));
-  orders.forEach((pedido) => (pedido.items || []).forEach((item) => sumar(item.id, 1)));
+  carrito.forEach((p) => sumar(p, 2));
+  pedidos.forEach((pedido) => pedido.productos.forEach((p) => sumar(p, 1)));
 
-  const enCarrito = new Set(cart.map((item) => item.id));
   const hayHistorial = Object.keys(puntos).length > 0;
+  const enCarrito = new Set(carrito.map((p) => p.id));
 
-  const recomendados = products
+  const recomendados = productos
     .filter((p) => !enCarrito.has(p.id))
-    .sort((a, b) => (puntos[b.category] || 0) - (puntos[a.category] || 0))
-    .slice(0, 4);
+    .sort((a, b) => (puntos[b.categoria] || 0) - (puntos[a.categoria] || 0))
+    .slice(0, 3);
 
   if (recomendados.length === 0) return null;
 
@@ -39,10 +36,10 @@ export default function Recomendaciones({ products = [], cart = [], orders = [],
         {recomendados.map((p) => (
           <li key={p.id}>
             <div>
-              <strong>{p.name}</strong>
-              <span>${Number(p.price).toFixed(2)}</span>
+              <strong>{p.nombre}</strong>
+              <span>${p.precio}</span>
             </div>
-            <button type="button" onClick={() => onAdd(p)}>
+            <button type="button" onClick={() => onAgregar(p)}>
               Agregar al carrito
             </button>
           </li>
