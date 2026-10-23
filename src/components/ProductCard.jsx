@@ -6,4 +6,13 @@ export default function ProductCard({ producto, onAgregar }) {
       <button onClick={() => onAgregar(producto)}>Agregar al carrito</button>
     </div>
   );
+  
 }
+import Recomendaciones from "./components/Recomendaciones";
+
+<Recomendaciones
+  products={products}
+  cart={cart}
+  orders={orders}
+  onAdd={agregarAlCarrito}
+/>
