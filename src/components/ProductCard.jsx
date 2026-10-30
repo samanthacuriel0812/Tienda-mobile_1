@@ -6,4 +6,4 @@ export default function ProductCard({ producto, onAgregar }) {
       <button onClick={() => onAgregar(producto)}>Agregar al carrito</button>
     </div>
   );
-  
+}
