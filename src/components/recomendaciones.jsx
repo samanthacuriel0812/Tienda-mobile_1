@@ -1,4 +1,4 @@
-import "./Recomendaciones.css";
+
 
 // Props:
 //   productos -> catálogo completo: [{ id, nombre, precio, categoria }]
