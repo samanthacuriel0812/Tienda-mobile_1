@@ -1,9 +1,9 @@
-
 import { useState } from "react";
 import ProductCard from "./components/ProductCard";
 import Checkout from "./components/Checkout";
 import Historial from "./components/Historial";
 import Recomendaciones from "./components/Recomendaciones";
+import Login from "./components/Login";
 import "./App.css";
 
 const productos = [
@@ -17,6 +17,7 @@ const productos = [
 const categorias = ["Todas", "Ropa", "Accesorios", "Calzado"];
 
 export default function App() {
+  const [usuario, setUsuario] = useState(null);
   const [carrito, setCarrito] = useState([]);
   const [categoria, setCategoria] = useState("Todas");
   const [busqueda, setBusqueda] = useState("");
@@ -49,9 +50,22 @@ export default function App() {
       p.nombre.toLowerCase().includes(busqueda.toLowerCase())
   );
 
+  if (!usuario) {
+    return (
+      <div>
+        <h1>TIENDA MOBILE</h1>
+        <Login onEntrar={setUsuario} />
+      </div>
+    );
+  }
+
   return (
     <div>
       <h1>TIENDA MOBILE</h1>
+      <p>
+        Hola, {usuario}{" "}
+        <button onClick={() => setUsuario(null)}>Cerrar sesión</button>
+      </p>
 
       <h2>Catálogo</h2>
       <input
