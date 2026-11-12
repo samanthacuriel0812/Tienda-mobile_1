@@ -13,3 +13,5 @@ const enviar = () => {
   if (!validar()) return;        
   onConfirmar({ nombre, direccion, pago });
 };
+
+{errores.nombre && <small style={{ color: "red" }}>{errores.nombre}</small>}
