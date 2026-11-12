@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductCard from "./components/ProductCard";
 import Checkout from "./components/Checkout";
 import Historial from "./components/Historial";
@@ -18,15 +18,50 @@ const categorias = ["Todas", "Ropa", "Accesorios", "Calzado"];
 
 export default function App() {
   const [usuario, setUsuario] = useState(null);
-  const [carrito, setCarrito] = useState([]);
+  // P1: el carrito y los pedidos se guardan en localStorage
+  const [carrito, setCarrito] = useState(
+    () => JSON.parse(localStorage.getItem("carrito")) || []
+  );
+  const [pedidos, setPedidos] = useState(
+    () => JSON.parse(localStorage.getItem("pedidos")) || []
+  );
   const [categoria, setCategoria] = useState("Todas");
   const [busqueda, setBusqueda] = useState("");
   const [mensaje, setMensaje] = useState("");
-  const [pedidos, setPedidos] = useState([]);
 
-  const agregar = (p) => setCarrito([...carrito, p]);
-  const quitar = (indice) => setCarrito(carrito.filter((_, i) => i !== indice));
-  const total = carrito.reduce((suma, p) => suma + p.precio, 0);
+  useEffect(() => {
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+  }, [carrito]);
+
+  useEffect(() => {
+    localStorage.setItem("pedidos", JSON.stringify(pedidos));
+  }, [pedidos]);
+
+  // P2: productos repetidos se agrupan con cantidad
+  const agregar = (p) => {
+    const existe = carrito.find((item) => item.id === p.id);
+    setCarrito(
+      existe
+        ? carrito.map((item) =>
+            item.id === p.id ? { ...item, cantidad: item.cantidad + 1 } : item
+          )
+        : [...carrito, { ...p, cantidad: 1 }]
+    );
+  };
+
+  const cambiarCantidad = (id, cambio) =>
+    setCarrito(
+      carrito
+        .map((item) =>
+          item.id === id ? { ...item, cantidad: item.cantidad + cambio } : item
+        )
+        .filter((item) => item.cantidad > 0)
+    );
+
+  const quitar = (id) => setCarrito(carrito.filter((item) => item.id !== id));
+
+  const total = carrito.reduce((suma, p) => suma + p.precio * p.cantidad, 0);
+  const totalArticulos = carrito.reduce((suma, p) => suma + p.cantidad, 0);
 
   const confirmarPedido = (datos) => {
     const nuevoPedido = {
@@ -97,11 +132,14 @@ export default function App() {
         onAgregar={agregar}
       />
 
-      <h2>Carrito ({carrito.length})</h2>
-      {carrito.map((p, i) => (
-        <p key={i}>
-          {p.nombre} - ${p.precio}{" "}
-          <button onClick={() => quitar(i)}>Quitar</button>
+      <h2>Carrito ({totalArticulos})</h2>
+      {carrito.length === 0 && <p>Tu carrito está vacío.</p>}
+      {carrito.map((p) => (
+        <p key={p.id}>
+          {p.nombre} - ${p.precio} x {p.cantidad}{" "}
+          <button onClick={() => cambiarCantidad(p.id, -1)}>-</button>
+          <button onClick={() => cambiarCantidad(p.id, 1)}>+</button>
+          <button onClick={() => quitar(p.id)}>Quitar</button>
         </p>
       ))}
       <h3>Total: ${total}</h3>
