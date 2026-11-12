@@ -1,16 +1,19 @@
-# React + Vite
+# TIENDA MOBILE
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+App móvil de comercio electrónico hecha con React y Vite para la materia Proyecto II.
 
-Currently, two official plugins are available:
+## Funciones
+- Catálogo de productos con filtros por categoría y búsqueda
+- Carrito con cantidades
+- Recomendaciones personalizadas
+- Checkout con validación de datos
+- Historial de pedidos
+- Login con huella digital simulada
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Cómo correrla
+1. Instalar dependencias: `npm install`
+2. Iniciar la app: `npm run dev`
+3. Abrir la dirección que aparece en la terminal (por ejemplo, http://localhost:5173)
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Autora
+Samantha Curiel, Universidad de Guadalajara
